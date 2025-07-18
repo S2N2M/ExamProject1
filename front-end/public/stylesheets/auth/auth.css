@@ -1,0 +1,14 @@
+body {
+    background: url('/assets/background.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+.overlay-text {
+    position: absolute;
+    bottom: 30px;
+    color: lightgray;
+}
+
+.btn {
+    background-color: #DAA520;
+}

@@ -1,0 +1,3235 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Noroff EP e-commerce",
+    "description": "APIs and a database to showcase their products for customers to purchase. Admin front-end, which uses the back-end system to manage the data."
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Register new user",
+        "description": "Guests can register a new account",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Register a new user",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateUser"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/UserCreated"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Login for registred users",
+        "description": "Users can log in with their registered account",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Login for users",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LoginUser"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UserLoggedIn"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/auth/users": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Fetch all users",
+        "description": "Fetch all registered users. Required admin authentication.",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UsersFetched"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/auth/users/{id}": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Fetch a user",
+        "description": "Fetch a user by ID. Required admin authentication.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UserFetched"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Update a user",
+        "description": "Update a user by ID. Required admin authentication.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UserUpdated"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/brands/": {
+      "get": {
+        "tags": [
+          "Brands"
+        ],
+        "summary": "Fetch all brands",
+        "description": "Fetches all brands from the database",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/BrandsFetched"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Brands"
+        ],
+        "summary": "Create a new brand",
+        "description": "Create a new brand. Requires admin authentication",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Brand name to be created",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateBrand"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/BrandCreated"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/brands/{id}": {
+      "put": {
+        "tags": [
+          "Brands"
+        ],
+        "summary": "Update a brand",
+        "description": "Update a brand name by ID. Requires admin authentication",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID of the brand to update"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Updated brand name",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateBrand"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/BrandUpdated"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Brands"
+        ],
+        "summary": "Delete a brand",
+        "description": "Delete a brand by ID. Requires admin authentication",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/BrandDeleted"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/cart/": {
+      "get": {
+        "tags": [
+          "Carts"
+        ],
+        "summary": "Fetch the users cart",
+        "description": "Fetch logged-in users cart",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetCart"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Carts"
+        ],
+        "summary": "Add items to cart",
+        "description": "Allows a logged-in user to add items to their cart",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Products to add to cart",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddToCart"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/CartSuccess"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Carts"
+        ],
+        "summary": "Remove items from the cart or clear it",
+        "description": "Removes a specific product from the cart if productId and quantity is provided, otherwise clear the cart",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "productId": {
+                  "example": "any"
+                },
+                "quantity": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ProductRemoved"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/cart/checkout/now": {
+      "post": {
+        "tags": [
+          "Carts"
+        ],
+        "summary": "Checkout and create order",
+        "description": "Creates and checks out an order for logged-in user",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/CheckoutOrder"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/categories/": {
+      "get": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Fetch all categories",
+        "description": "Fetches all categories from the database",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CategoriesFetched"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Create a new category",
+        "description": "Create a new category. Requires admin authentication",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Category name to be created",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateCategory"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/CategoryCreated"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/categories/{id}": {
+      "put": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Update a category",
+        "description": "Update a category name by ID. Requires admin authentication",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID of the category to update"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Updated category name",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateCategory"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CategoryUpdated"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Delete a category",
+        "description": "Delete a category by ID. Requires admin authentication",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CategoryDeleted"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/init": {
+      "post": {
+        "tags": [
+          "Initilize"
+        ],
+        "summary": "Initilize database with data",
+        "description": "Creates default products, memberships, roles and a default admin user if they don\\'t already exist",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Initilize"
+            },
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/memberships/": {
+      "get": {
+        "tags": [
+          "Memberships"
+        ],
+        "summary": "View all membership status",
+        "description": "Fetch all available membership status. Requires admin authentication",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/MembershipsFetched"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/memberships/users": {
+      "get": {
+        "tags": [
+          "Memberships"
+        ],
+        "summary": "View all users with their membership status",
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UsersMembership"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/orders/": {
+      "get": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Fetch the logged-in user",
+        "description": "A list of the logged-in user",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UserOrder"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/orders/all-orders": {
+      "get": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Fetch all orders",
+        "description": "A list of orders made by all users. Requires Admin authentication",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/AllOrders"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/orders/{id}/": {
+      "put": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Update status of an order",
+        "description": "Update the status of an order, only options available are \\'In Progress\\', \\'Ordered\\', \\'Completed\\'. Requires Admin authentication",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID of the order to update"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Update status to an order",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/OrderStatus"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UpdateOrder"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/products/": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Fetch all products",
+        "description": "Fetch all products from the database. Requires admin authentication to see soft-deleted products",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ProductsFetched"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Add a new product",
+        "description": "Add a new product to the collection. Requires admin authentication",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Add product",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateProduct"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/ProductCreated"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/products/{id}": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Fetch a product",
+        "description": "Fetch a product by ID. Requires admin authentication",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ProductFetched"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Update a product",
+        "description": "Update a product by ID. Requires admin authentication",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID of the product to update"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Update a product",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateProduct"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ProductUpdated"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Delete a product",
+        "description": "Soft-delete a product by ID. Requires admin authentication",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID of the product to delete"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ProductDeleted"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/products/restore/{id}": {
+      "put": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Restore a product",
+        "description": "Restore a soft-deleted product by ID. Requires admin authentication",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID of the product to restore"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ProductRestored"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/search/": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/roles/": {
+      "get": {
+        "tags": [
+          "Roles"
+        ],
+        "summary": "Fetch all roles",
+        "description": "Fetches all roles in the database. Requires admin authentication",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/RolesFetched"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "BrandsFetched": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "statusCode": {
+          "type": "number",
+          "example": 200
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "example": "Viewing all brands"
+            },
+            "brands": {
+              "type": "array",
+              "example": [
+                "List of all brands"
+              ],
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "result",
+            "brands"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "statusCode",
+        "data"
+      ]
+    },
+    "CreateBrand": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Microsoft"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "BrandCreated": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "statusCode": {
+          "type": "number",
+          "example": 201
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "example": "Created new brand"
+            },
+            "brand": {
+              "type": "string",
+              "example": "Microsoft"
+            }
+          },
+          "required": [
+            "result",
+            "brand"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "statusCode",
+        "data"
+      ]
+    },
+    "UpdateBrand": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Amazon"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "BrandUpdated": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "statusCode": {
+          "type": "number",
+          "example": 200
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "example": "Brand is updated"
+            },
+            "brand": {
+              "type": "string",
+              "example": "Amazon"
+            }
+          },
+          "required": [
+            "result",
+            "brand"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "statusCode",
+        "data"
+      ]
+    },
+    "BrandDeleted": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "statusCode": {
+          "type": "number",
+          "example": 200
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "array",
+              "example": [
+                "Brand is deleted"
+              ],
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "statusCode",
+        "data"
+      ]
+    },
+    "CategoriesFetched": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "statusCode": {
+          "type": "number",
+          "example": 200
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "example": "Viewing all categories"
+            },
+            "categories": {
+              "type": "array",
+              "example": [
+                "List of all categories"
+              ],
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "result",
+            "categories"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "statusCode",
+        "data"
+      ]
+    },
+    "CreateCategory": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Monitors"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "CategoryCreated": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "statusCode": {
+          "type": "number",
+          "example": 201
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "example": "Created new category"
+            },
+            "category": {
+              "type": "string",
+              "example": "Monitors"
+            }
+          },
+          "required": [
+            "result",
+            "category"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "statusCode",
+        "data"
+      ]
+    },
+    "UpdateCategory": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Keyboards"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "CategoryUpdated": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "statusCode": {
+          "type": "number",
+          "example": 200
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "example": "Category is updated"
+            },
+            "category": {
+              "type": "string",
+              "example": "Keyboards"
+            }
+          },
+          "required": [
+            "result",
+            "category"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "statusCode",
+        "data"
+      ]
+    },
+    "CategoryDeleted": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "statusCode": {
+          "type": "number",
+          "example": 200
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "array",
+              "example": [
+                "Category is deleted"
+              ],
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "statusCode",
+        "data"
+      ]
+    },
+    "GetCart": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "statusCode": {
+          "type": "number",
+          "example": 200
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "example": "Products in cart:"
+            },
+            "cart": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "ProductId": {
+                    "type": "number",
+                    "example": 8
+                  },
+                  "ProductName": {
+                    "type": "string",
+                    "example": "Samsung S20"
+                  },
+                  "Price": {
+                    "type": "string",
+                    "example": "900"
+                  },
+                  "Quantity": {
+                    "type": "number",
+                    "example": 2
+                  },
+                  "TotalPrice": {
+                    "type": "number",
+                    "example": 1800
+                  }
+                },
+                "required": [
+                  "ProductId",
+                  "ProductName",
+                  "Price",
+                  "Quantity",
+                  "TotalPrice"
+                ]
+              }
+            }
+          },
+          "required": [
+            "result",
+            "cart"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "statusCode",
+        "data"
+      ]
+    },
+    "AddToCart": {
+      "type": "object",
+      "properties": {
+        "productId": {
+          "type": "number",
+          "example": 1
+        },
+        "quantity": {
+          "type": "number",
+          "example": 2
+        }
+      },
+      "required": [
+        "productId",
+        "quantity"
+      ]
+    },
+    "CartSuccess": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "statusCode": {
+          "type": "number",
+          "example": 201
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "example": "Product added to cart"
+            },
+            "cart": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number",
+                    "example": 10
+                  },
+                  "CartId": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "ProductId": {
+                    "type": "number",
+                    "example": 8
+                  },
+                  "Quantity": {
+                    "type": "number",
+                    "example": 2
+                  },
+                  "updatedAt": {
+                    "type": "string",
+                    "example": "Cart last updated"
+                  },
+                  "createdAt": {
+                    "type": "string",
+                    "example": "Cart created"
+                  }
+                },
+                "required": [
+                  "id",
+                  "CartId",
+                  "ProductId",
+                  "Quantity",
+                  "updatedAt",
+                  "createdAt"
+                ]
+              }
+            }
+          },
+          "required": [
+            "result",
+            "cart"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "statusCode",
+        "data"
+      ]
+    },
+    "CheckoutOrder": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "statusCode": {
+          "type": "number",
+          "example": 201
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "example": "Order created."
+            },
+            "cart": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number",
+                    "example": 5
+                  },
+                  "UserId": {
+                    "type": "number",
+                    "example": 2
+                  },
+                  "OrderNumber": {
+                    "type": "string",
+                    "example": "j8a72g31"
+                  },
+                  "Status": {
+                    "type": "string",
+                    "example": "In Progress"
+                  },
+                  "MembershipStatus": {
+                    "type": "string",
+                    "example": "Bronze"
+                  },
+                  "TotalPrice": {
+                    "type": "string",
+                    "example": "1800"
+                  },
+                  "updatedAt": {
+                    "type": "string",
+                    "example": "Order update"
+                  },
+                  "createdAt": {
+                    "type": "string",
+                    "example": "Ordered created"
+                  }
+                },
+                "required": [
+                  "id",
+                  "UserId",
+                  "OrderNumber",
+                  "Status",
+                  "MembershipStatus",
+                  "TotalPrice",
+                  "updatedAt",
+                  "createdAt"
+                ]
+              }
+            }
+          },
+          "required": [
+            "result",
+            "cart"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "statusCode",
+        "data"
+      ]
+    },
+    "RemoveProduct": {
+      "type": "object",
+      "properties": {
+        "productId": {
+          "type": "number",
+          "example": 1
+        },
+        "quantity": {
+          "type": "number",
+          "example": 1
+        }
+      },
+      "required": [
+        "productId",
+        "quantity"
+      ]
+    },
+    "ProductRemoved": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "statusCode": {
+          "type": "number",
+          "example": 200
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "example": "Product removed from cart."
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "statusCode",
+        "data"
+      ]
+    },
+    "MembershipsFetched": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "statusCode": {
+          "type": "number",
+          "example": 200
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "example": "Viewing all memberships."
+            },
+            "memberships": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "Status": {
+                    "type": "string",
+                    "example": "Bronze"
+                  },
+                  "MinItems": {
+                    "type": "number",
+                    "example": 0
+                  },
+                  "MaxItems": {
+                    "type": "number",
+                    "example": 15
+                  },
+                  "DiscountPercent": {
+                    "type": "number",
+                    "example": 0
+                  }
+                },
+                "required": [
+                  "id",
+                  "Status",
+                  "MinItems",
+                  "MaxItems",
+                  "DiscountPercent"
+                ]
+              }
+            }
+          },
+          "required": [
+            "result",
+            "memberships"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "statusCode",
+        "data"
+      ]
+    },
+    "UsersMembership": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "statusCode": {
+          "type": "number",
+          "example": 200
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "example": "Viewing all users membership"
+            },
+            "memberships": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "Gold": {
+                    "type": "object",
+                    "properties": {
+                      "Firstname": {
+                        "type": "string",
+                        "example": "John"
+                      },
+                      "Lastname": {
+                        "type": "string",
+                        "example": "Doe"
+                      },
+                      "Username": {
+                        "type": "string",
+                        "example": "JohnDoe1"
+                      },
+                      "Email": {
+                        "type": "string",
+                        "example": "Johndoe@example.com"
+                      },
+                      "Membership": {
+                        "type": "object",
+                        "properties": {
+                          "Status": {
+                            "type": "string",
+                            "example": "Gold"
+                          }
+                        },
+                        "required": [
+                          "Status"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "Firstname",
+                      "Lastname",
+                      "Username",
+                      "Email",
+                      "Membership"
+                    ]
+                  }
+                },
+                "required": [
+                  "Gold"
+                ]
+              }
+            }
+          },
+          "required": [
+            "result",
+            "memberships"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "statusCode",
+        "data"
+      ]
+    },
+    "UserOrder": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "statusCode": {
+          "type": "number",
+          "example": 200
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "example": "Viewing all orders from user:"
+            },
+            "orders": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "OrderNumber": {
+                    "type": "string",
+                    "example": "j8a72g31"
+                  },
+                  "Status": {
+                    "type": "string",
+                    "example": "In Progress"
+                  },
+                  "MembershipStatus": {
+                    "type": "string",
+                    "example": "Bronze"
+                  },
+                  "TotalPrize": {
+                    "type": "string",
+                    "example": "650.00"
+                  },
+                  "createdAt": {
+                    "type": "string",
+                    "example": "Purchase date"
+                  },
+                  "updatedAt": {
+                    "type": "string",
+                    "example": "Last status update"
+                  },
+                  "UserId": {
+                    "type": "number",
+                    "example": 2
+                  },
+                  "OrderItems": {
+                    "type": "array",
+                    "example": [
+                      "List of products ordered"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "id",
+                  "OrderNumber",
+                  "Status",
+                  "MembershipStatus",
+                  "TotalPrize",
+                  "createdAt",
+                  "updatedAt",
+                  "UserId",
+                  "OrderItems"
+                ]
+              }
+            }
+          },
+          "required": [
+            "result",
+            "orders"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "statusCode",
+        "data"
+      ]
+    },
+    "AllOrders": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "statusCode": {
+          "type": "number",
+          "example": 200
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "example": "Viewing all orders:"
+            },
+            "orders": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "OrderNumber": {
+                    "type": "string",
+                    "example": "j8a72g31"
+                  },
+                  "Status": {
+                    "type": "string",
+                    "example": "In Progress"
+                  },
+                  "MembershipStatus": {
+                    "type": "string",
+                    "example": "Bronze"
+                  },
+                  "TotalPrize": {
+                    "type": "string",
+                    "example": "650.00"
+                  },
+                  "createdAt": {
+                    "type": "string",
+                    "example": "Purchase date"
+                  },
+                  "updatedAt": {
+                    "type": "string",
+                    "example": "Last status update"
+                  },
+                  "UserId": {
+                    "type": "number",
+                    "example": 2
+                  },
+                  "OrderItems": {
+                    "type": "array",
+                    "example": [
+                      "List of products ordered"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "id",
+                  "OrderNumber",
+                  "Status",
+                  "MembershipStatus",
+                  "TotalPrize",
+                  "createdAt",
+                  "updatedAt",
+                  "UserId",
+                  "OrderItems"
+                ]
+              }
+            }
+          },
+          "required": [
+            "result",
+            "orders"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "statusCode",
+        "data"
+      ]
+    },
+    "OrderStatus": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "array",
+          "example": [
+            "In Progress",
+            "Ordered",
+            "Completed"
+          ],
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "status"
+      ]
+    },
+    "UpdateOrder": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "statusCode": {
+          "type": "number",
+          "example": 200
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "example": "Order has been updated"
+            },
+            "orders": {
+              "type": "array",
+              "example": [
+                "In Progress",
+                "Ordered",
+                "Completed"
+              ],
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "result",
+            "orders"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "statusCode",
+        "data"
+      ]
+    },
+    "Initilize": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "statusCode": {
+          "type": "number",
+          "example": 200
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "array",
+              "example": [
+                "Created products in the database",
+                "Created memberships in the database.",
+                "Created roles in the database."
+              ],
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "statusCode",
+        "data"
+      ]
+    },
+    "ProductsFetched": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "statusCode": {
+          "type": "number",
+          "example": 200
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "example": "Viewing all products:"
+            },
+            "products": {
+              "type": "array",
+              "example": [
+                "List of all products. Admin authentication for deleted products"
+              ],
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "result",
+            "products"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "statusCode",
+        "data"
+      ]
+    },
+    "ProductFetched": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "statusCode": {
+          "type": "number",
+          "example": 200
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "example": "Product found:"
+            },
+            "products": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "Name": {
+                    "type": "string",
+                    "example": "iPhone 16 128GB"
+                  },
+                  "Price": {
+                    "type": "string",
+                    "example": "1299.00"
+                  },
+                  "Quantity": {
+                    "type": "number",
+                    "example": 3
+                  },
+                  "Brand": {
+                    "type": "string",
+                    "example": "Apple"
+                  },
+                  "BrandId": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "Category": {
+                    "type": "string",
+                    "example": "Phones"
+                  },
+                  "CategoryId": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "Imgurl": {
+                    "type": "string",
+                    "example": "imgurl"
+                  },
+                  "IsDeleted": {
+                    "type": "string",
+                    "example": "0/1(BOOLEAN: false(0), true(1))"
+                  },
+                  "DataAdded": {
+                    "type": "string",
+                    "example": "Date product added"
+                  },
+                  "updatedAt": {
+                    "type": "string",
+                    "example": "Last update to product"
+                  }
+                },
+                "required": [
+                  "id",
+                  "Name",
+                  "Price",
+                  "Quantity",
+                  "Brand",
+                  "BrandId",
+                  "Category",
+                  "CategoryId",
+                  "Imgurl",
+                  "IsDeleted",
+                  "DataAdded",
+                  "updatedAt"
+                ]
+              }
+            }
+          },
+          "required": [
+            "result",
+            "products"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "statusCode",
+        "data"
+      ]
+    },
+    "CreateProduct": {
+      "type": "object",
+      "properties": {
+        "imgurl": {
+          "type": "string",
+          "example": "imgurl"
+        },
+        "name": {
+          "type": "string",
+          "example": "Product Name"
+        },
+        "description": {
+          "type": "string",
+          "example": "Product description"
+        },
+        "price": {
+          "type": "number",
+          "example": 499
+        },
+        "quantity": {
+          "type": "number",
+          "example": 10
+        },
+        "categoryId": {
+          "type": "number",
+          "example": 2
+        },
+        "brandId": {
+          "type": "number",
+          "example": 4
+        }
+      },
+      "required": [
+        "imgurl",
+        "name",
+        "description",
+        "price",
+        "quantity",
+        "categoryId",
+        "brandId"
+      ]
+    },
+    "ProductCreated": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "statusCode": {
+          "type": "number",
+          "example": 201
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "example": "Created a new product:"
+            },
+            "product": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Product Name"
+                  },
+                  "description": {
+                    "type": "string",
+                    "example": "Product description"
+                  },
+                  "price": {
+                    "type": "number",
+                    "example": 499
+                  },
+                  "quantity": {
+                    "type": "number",
+                    "example": 10
+                  },
+                  "categoryId": {
+                    "type": "number",
+                    "example": 2
+                  },
+                  "brandId": {
+                    "type": "number",
+                    "example": 4
+                  },
+                  "imgurl": {
+                    "type": "string",
+                    "example": "imgurl"
+                  },
+                  "DataAdded": {
+                    "type": "string",
+                    "example": "Date product got added"
+                  },
+                  "updatedAt": {
+                    "type": "string",
+                    "example": "Last update to the product"
+                  },
+                  "IsDeleted": {
+                    "type": "string",
+                    "example": "Default value 0 (false) BOOLEAN"
+                  }
+                },
+                "required": [
+                  "name",
+                  "description",
+                  "price",
+                  "quantity",
+                  "categoryId",
+                  "brandId",
+                  "imgurl",
+                  "DataAdded",
+                  "updatedAt",
+                  "IsDeleted"
+                ]
+              }
+            }
+          },
+          "required": [
+            "result",
+            "product"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "statusCode",
+        "data"
+      ]
+    },
+    "UpdateProduct": {
+      "type": "object",
+      "properties": {
+        "imgurl": {
+          "type": "string",
+          "example": "imgurl"
+        },
+        "name": {
+          "type": "string",
+          "example": "New Product Name"
+        },
+        "description": {
+          "type": "string",
+          "example": "New Product description"
+        },
+        "price": {
+          "type": "number",
+          "example": 699
+        },
+        "quantity": {
+          "type": "number",
+          "example": 15
+        },
+        "categoryId": {
+          "type": "number",
+          "example": 2
+        },
+        "brandId": {
+          "type": "number",
+          "example": 4
+        }
+      },
+      "required": [
+        "imgurl",
+        "name",
+        "description",
+        "price",
+        "quantity",
+        "categoryId",
+        "brandId"
+      ]
+    },
+    "ProductUpdated": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "statusCode": {
+          "type": "number",
+          "example": 200
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "example": "Product is updated:"
+            },
+            "product": {
+              "type": "object",
+              "properties": {
+                "Imgurl": {
+                  "type": "string",
+                  "example": "imgurl"
+                },
+                "Name": {
+                  "type": "string",
+                  "example": "New Product Name"
+                },
+                "Description": {
+                  "type": "string",
+                  "example": "New Product description"
+                },
+                "Price": {
+                  "type": "number",
+                  "example": 699
+                },
+                "DataAdded": {
+                  "type": "string",
+                  "example": "Date product got added"
+                },
+                "IsDeleted": {
+                  "type": "string",
+                  "example": "Default value 0 (false) BOOLEAN"
+                },
+                "UpdatedAt": {
+                  "type": "string",
+                  "example": "Last update to the product"
+                },
+                "Quantity": {
+                  "type": "number",
+                  "example": 15
+                },
+                "CategoryId": {
+                  "type": "number",
+                  "example": 2
+                },
+                "BrandId": {
+                  "type": "number",
+                  "example": 4
+                }
+              },
+              "required": [
+                "Imgurl",
+                "Name",
+                "Description",
+                "Price",
+                "DataAdded",
+                "IsDeleted",
+                "UpdatedAt",
+                "Quantity",
+                "CategoryId",
+                "BrandId"
+              ]
+            }
+          },
+          "required": [
+            "result",
+            "product"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "statusCode",
+        "data"
+      ]
+    },
+    "ProductDeleted": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "statusCode": {
+          "type": "number",
+          "example": 200
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "example": "Product is deleted."
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "statusCode",
+        "data"
+      ]
+    },
+    "ProductRestored": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "statusCode": {
+          "type": "number",
+          "example": 200
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "example": "Product is restored."
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "statusCode",
+        "data"
+      ]
+    },
+    "RolesFetched": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "statusCode": {
+          "type": "number",
+          "example": 200
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "example": "View all roles:"
+            },
+            "roles": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "Name": {
+                    "type": "string",
+                    "example": "Role Name"
+                  }
+                },
+                "required": [
+                  "id",
+                  "Name"
+                ]
+              }
+            }
+          },
+          "required": [
+            "result",
+            "roles"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "statusCode",
+        "data"
+      ]
+    },
+    "CreateUser": {
+      "type": "object",
+      "properties": {
+        "firstname": {
+          "type": "string",
+          "example": "John"
+        },
+        "lastname": {
+          "type": "string",
+          "example": "Doe"
+        },
+        "username": {
+          "type": "string",
+          "example": "john123"
+        },
+        "email": {
+          "type": "string",
+          "example": "johndoe@example.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "S3CUR3P455W0RD"
+        },
+        "address": {
+          "type": "string",
+          "example": "Lake tahoe 301"
+        },
+        "phone": {
+          "type": "string",
+          "example": "901894712"
+        }
+      },
+      "required": [
+        "firstname",
+        "lastname",
+        "username",
+        "email",
+        "password",
+        "address",
+        "phone"
+      ]
+    },
+    "UserCreated": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "statusCode": {
+          "type": "number",
+          "example": 201
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "example": "User successfully created."
+            }
+          },
+          "required": [
+            "result"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "statusCode",
+        "data"
+      ]
+    },
+    "LoginUser": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "example": "john123"
+        },
+        "password": {
+          "type": "string",
+          "example": "S3CUR3P455W0RD"
+        }
+      },
+      "required": [
+        "username",
+        "password"
+      ]
+    },
+    "UserLoggedIn": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "statusCode": {
+          "type": "number",
+          "example": 200
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "example": "Successfully logged in."
+            },
+            "id": {
+              "type": "number",
+              "example": 4
+            },
+            "role": {
+              "type": "number",
+              "example": 2
+            },
+            "username": {
+              "type": "string",
+              "example": "john123"
+            },
+            "email": {
+              "type": "string",
+              "example": "johndoe@example.com"
+            },
+            "token": {
+              "type": "string",
+              "example": "SECRET JWT TOKEN"
+            }
+          },
+          "required": [
+            "result",
+            "id",
+            "role",
+            "username",
+            "email",
+            "token"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "statusCode",
+        "data"
+      ]
+    },
+    "UsersFetched": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "statusCode": {
+          "type": "number",
+          "example": 200
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "example": "Showing all users:"
+            },
+            "users": {
+              "type": "array",
+              "example": [
+                "List of all users"
+              ],
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "result",
+            "users"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "statusCode",
+        "data"
+      ]
+    },
+    "UserFetched": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "statusCode": {
+          "type": "number",
+          "example": 200
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "example": "User found:"
+            },
+            "users": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number",
+                    "example": 4
+                  },
+                  "Firstname": {
+                    "type": "string",
+                    "example": "John"
+                  },
+                  "Lastname": {
+                    "type": "string",
+                    "example": "Doe"
+                  },
+                  "Username": {
+                    "type": "string",
+                    "example": "john123"
+                  },
+                  "Email": {
+                    "type": "string",
+                    "example": "johndoe@example.com"
+                  },
+                  "Address": {
+                    "type": "string",
+                    "example": "Lake tahoe 301"
+                  },
+                  "Phone": {
+                    "type": "string",
+                    "example": "901894712"
+                  },
+                  "createdAt": {
+                    "type": "string",
+                    "example": "Date user account got created"
+                  },
+                  "updatedAt": {
+                    "type": "string",
+                    "example": "Last update to user"
+                  },
+                  "MembershipId": {
+                    "type": "number",
+                    "example": 2
+                  },
+                  "RoleId": {
+                    "type": "number",
+                    "example": 2
+                  }
+                },
+                "required": [
+                  "id",
+                  "Firstname",
+                  "Lastname",
+                  "Username",
+                  "Email",
+                  "Address",
+                  "Phone",
+                  "createdAt",
+                  "updatedAt",
+                  "MembershipId",
+                  "RoleId"
+                ]
+              }
+            }
+          },
+          "required": [
+            "result",
+            "users"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "statusCode",
+        "data"
+      ]
+    },
+    "UpdateUser": {
+      "type": "object",
+      "properties": {
+        "firstname": {
+          "type": "string",
+          "example": "Johnny"
+        },
+        "lastname": {
+          "type": "string",
+          "example": "Doi"
+        },
+        "username": {
+          "type": "string",
+          "example": "johnny321"
+        },
+        "email": {
+          "type": "string",
+          "example": "johnnydoe@example.com"
+        },
+        "membershipId": {
+          "type": "number",
+          "example": 3
+        },
+        "roleId": {
+          "type": "number",
+          "example": 2
+        }
+      },
+      "required": [
+        "firstname",
+        "lastname",
+        "username",
+        "email",
+        "membershipId",
+        "roleId"
+      ]
+    },
+    "UserUpdated": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "statusCode": {
+          "type": "number",
+          "example": 200
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "string",
+              "example": "User is updated:"
+            },
+            "user": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "Firstname": {
+                    "type": "string",
+                    "example": "Johnny"
+                  },
+                  "Lastname": {
+                    "type": "string",
+                    "example": "Doi"
+                  },
+                  "Username": {
+                    "type": "string",
+                    "example": "johnny321"
+                  },
+                  "Email": {
+                    "type": "string",
+                    "example": "johnnydoe@example.com"
+                  },
+                  "Address": {
+                    "type": "string",
+                    "example": "Lake tahoe 301"
+                  },
+                  "Phone": {
+                    "type": "string",
+                    "example": "901894712"
+                  },
+                  "MembershipId": {
+                    "type": "number",
+                    "example": 3
+                  },
+                  "RoleId": {
+                    "type": "number",
+                    "example": 2
+                  }
+                },
+                "required": [
+                  "Firstname",
+                  "Lastname",
+                  "Username",
+                  "Email",
+                  "Address",
+                  "Phone",
+                  "MembershipId",
+                  "RoleId"
+                ]
+              }
+            }
+          },
+          "required": [
+            "result",
+            "user"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "statusCode",
+        "data"
+      ]
+    },
+    "Search": {
+      "type": "object",
+      "properties": {}
+    }
+  }
+}
